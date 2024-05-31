@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "core",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
@@ -55,8 +57,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = "Notes.urls"
+# CORS settings
+CORS_ALLOW_ALL_ORIGINS = True
 
+ROOT_URLCONF = "Notes.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
