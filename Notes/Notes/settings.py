@@ -31,7 +31,7 @@ SECRET_KEY = "django-insecure-(z!o$xazohj4$^6^)#+d%%owjyd#$-rjp!7#*nlgo%qpjgq@me
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -59,7 +60,11 @@ MIDDLEWARE = [
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = True
-
+CORS_ALLOW_HEADERS = [
+       'hx-request',
+       'hx-target',
+       'hx-current-url',
+   ]
 ROOT_URLCONF = "Notes.urls"
 TEMPLATES = [
     {

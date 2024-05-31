@@ -6,3 +6,5 @@
 .venv
 notes-app-venv
 *.js
+*.html
+components.py
