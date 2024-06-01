@@ -29,5 +29,5 @@ urlpatterns += [
     path('api/get-notes/<uuid:id>/', views.GetNote.as_view()), 
     path('api/create-label/', views.CreateLabel.as_view()), 
     path('api/update-note/<uuid:pk>/', views.UpdateNote.as_view()),
-    path('api/render-note/<uuid:id>/', views.RenderNote.as_view()), 
+    # path('api/render-note/<uuid:id>/', views.RenderNote.as_view()), 
 ]
