@@ -31,18 +31,12 @@ class CreateLabel(generics.CreateAPIView):
 # ! PLEASE DO NOT TOUCH: For Testing
 
 from .components import noteReader
+
 class RenderNote(APIView):
     def get(self, request, id):
         note = Note.objects.get(id=id)
-        user = User.objects.first()
-        html = noteReader(user, note)
-        print(note.modified.ctime())
+        html = noteReader(note)
         return HttpResponse(html)
-    
-    def patch(self, request, id):
-        print('patch is working')
-        return HttpResponse(status=status.HTTP_204_NO_CONTENT) 
-    
     
 class SaveNoteTest(generics.UpdateAPIView):
     serializer_class = NoteSerializer
