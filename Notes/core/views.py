@@ -30,22 +30,22 @@ class CreateLabel(generics.CreateAPIView):
 
 # ! PLEASE DO NOT TOUCH: For Testing
 
-from .components import noteReader
+# from .components import noteReader
 
-class RenderNote(APIView):
-    def get(self, request, id):
-        note = Note.objects.get(id=id)
-        html = noteReader(note)
-        return HttpResponse(html)
+# class RenderNote(APIView):
+#     def get(self, request, id):
+#         note = Note.objects.get(id=id)
+#         html = noteReader(note)
+#         return HttpResponse(html)
     
-class SaveNoteTest(generics.UpdateAPIView):
-    serializer_class = NoteSerializer
-    queryset = Note.objects.all() 
+# class SaveNoteTest(generics.UpdateAPIView):
+#     serializer_class = NoteSerializer
+#     queryset = Note.objects.all() 
     
-    def finalize_response(self, request, response, *args, **kwargs):
-        # If the update was successful
-        if response.status_code == status.HTTP_200_OK: 
-            response.status_code = status.HTTP_204_NO_CONTENT # so that htmx does not do any swapping
-        return super().finalize_response(request, response, *args, **kwargs)
+#     def finalize_response(self, request, response, *args, **kwargs):
+#         # If the update was successful
+#         if response.status_code == status.HTTP_200_OK: 
+#             response.status_code = status.HTTP_204_NO_CONTENT # so that htmx does not do any swapping
+#         return super().finalize_response(request, response, *args, **kwargs)
         
 
