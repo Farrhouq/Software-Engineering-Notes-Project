@@ -63,6 +63,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_HEADERS = [
        'hx-request',
        'hx-target',
+       'hx-trigger',
        'hx-current-url',
    ]
 ROOT_URLCONF = "Notes.urls"

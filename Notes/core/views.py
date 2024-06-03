@@ -28,19 +28,24 @@ class GetNotes(generics.ListAPIView):
 class CreateLabel(generics.CreateAPIView):
     serializer_class = LabelSerializer
 
-# PLEASE DO NOT TOUCH: For Testing
+# ! PLEASE DO NOT TOUCH: For Testing
 
 # from .components import noteReader
+
 # class RenderNote(APIView):
 #     def get(self, request, id):
 #         note = Note.objects.get(id=id)
-#         user = User.objects.first()
-#         html = noteReader(user, note)
-#         print(note.modified.ctime())
+#         html = noteReader(note)
 #         return HttpResponse(html)
     
-#     def patch(self, request, id):
-#         print('patch is working')
-#         return HttpResponse(status=status.HTTP_204_NO_CONTENT) 
+# class SaveNoteTest(generics.UpdateAPIView):
+#     serializer_class = NoteSerializer
+#     queryset = Note.objects.all() 
+    
+#     def finalize_response(self, request, response, *args, **kwargs):
+#         # If the update was successful
+#         if response.status_code == status.HTTP_200_OK: 
+#             response.status_code = status.HTTP_204_NO_CONTENT # so that htmx does not do any swapping
+#         return super().finalize_response(request, response, *args, **kwargs)
         
 
