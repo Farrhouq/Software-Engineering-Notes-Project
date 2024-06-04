@@ -6,6 +6,8 @@ from django.contrib.auth.models import User
 from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework import permissions
+
 # other imports
 from .serializers import NoteSerializer, LabelSerializer
 from .models import Note
@@ -48,4 +50,11 @@ class CreateLabel(generics.CreateAPIView):
 #             response.status_code = status.HTTP_204_NO_CONTENT # so that htmx does not do any swapping
 #         return super().finalize_response(request, response, *args, **kwargs)
         
-
+# ! PLEASE DO NOT TOUCH: For Testing
+class GetSharedNotes(generics.ListAPIView):
+    serializer_class = NoteSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_queryset(self):
+        notes = self.request.user.readable_notes.all() or Note.objects.none()
+        return notes
