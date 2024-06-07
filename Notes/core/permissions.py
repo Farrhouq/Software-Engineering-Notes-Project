@@ -1,15 +1,16 @@
-from rest_framework.permissions import BasePermission, SAFE_METHODS
+from rest_framework.permissions import BasePermission
 
-class IsAuthorOrCanReadNote(BasePermission):
+class CanReadNote(BasePermission):
     message = 'not allowed to view this note'
     
-    def has_permission(self, request, view):
-        return True # returns true for now (I'm taking a break)
+    def has_object_permission(self, request, view, obj):
+        return request.user == obj.author or request.user in obj.can_read.all()
     
     
-class IsAuthorOrCanEditNote(BasePermission):
-    message = 'not allowed to edit this not'
+class CanEditNote(BasePermission):
+    message = 'not allowed to edit this note'
     
-    def has_permission(self, request, view):
-        return True # returns true for now (I'm taking a break)
+    def has_object_permission(self, request, view, obj):
+        return False 
+        return request.user == obj.author or request.user in obj.can_edit.all()
         

@@ -11,7 +11,7 @@ class AbstractModel(models.Model):
 
 class Label(AbstractModel): 
     title = models.CharField(max_length=128)
-    
+
     def __str__(self):
         return self.title
 
@@ -23,9 +23,9 @@ class Note(AbstractModel):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     private = models.BooleanField(default=True) # Can only be viewed by specific people otherwise everyone can read it (through shared link)
-    public_to = models.ManyToManyField(User, related_name='readable_notes') # if note is private this specifies those allowed to read it (through shared link)
+    can_read = models.ManyToManyField(User, related_name='readable_notes') # if note is private this specifies those allowed to read it (through shared link)
     can_edit = models.ManyToManyField(User, related_name='editable_notes') # if note is private this specifies those allowed to edit it (through shared link)    
-    
+
     def __str__(self) -> str:
         return self.title
     

@@ -27,7 +27,7 @@ urlpatterns += [
     path('admin/', admin.site.urls),
     path('api/create-note/', views.CreateNote.as_view()),
     path('api/get-notes/', views.GetNotes.as_view()),
-    path('api/get-notes/<uuid:id>/', views.GetNote.as_view()),
+    path('api/get-notes/<uuid:pk>/', views.GetNote.as_view()),
     path('api/create-label/', views.CreateLabel.as_view()),
     path('api/update-note/<uuid:pk>/', views.UpdateNote.as_view()),
 
@@ -36,4 +36,7 @@ urlpatterns += [
     # path('api/render-note/<uuid:id>/', views.RenderNote.as_view()),
     # path('api/save-note-test/<uuid:pk>/', views.SaveNoteTest.as_view()), 
     path('api/get-shared-notes/', views.GetSharedNotes.as_view()), 
+    path('api/read-note/', views.ReadNote.as_view()), 
+    path('api/status/', views.Status.as_view()),
+    path('api/signup/', views.SignUp.as_view()),
 ]
