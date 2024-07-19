@@ -61,11 +61,14 @@ MIDDLEWARE = [
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = True
+
 CORS_ALLOW_HEADERS = [
+       'authorization',
        'hx-request',
        'hx-target',
        'hx-trigger',
        'hx-current-url',
+       'content-type'
    ]
 ROOT_URLCONF = "Notes.urls"
 TEMPLATES = [

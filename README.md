@@ -6,7 +6,7 @@ A notes taking app for our software engineering project in COE'25.
 - Bernard Wodoame
 - 
 
-### Example notes data
+`api/get-notes/`
 ```json
   [
   {
@@ -233,7 +233,7 @@ A notes taking app for our software engineering project in COE'25.
 ```
 
 
-### Example label data
+`api/get-labels/`
 ```json
   [
   {

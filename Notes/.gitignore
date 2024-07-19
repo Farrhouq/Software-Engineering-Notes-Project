@@ -8,3 +8,4 @@ notes-app-venv
 *.js
 *.html
 components.py
+async.py
