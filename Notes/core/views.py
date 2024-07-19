@@ -93,30 +93,30 @@ class Login(TokenObtainPairView):
 
 # ! PLEASE DO NOT TOUCH: For Testing
 
-from .components import noteReader
-class RenderNote(APIView):
-    # permission_classes = [permissions.IsAuthenticated]
-    def get(self, request, id):
-        user = request.user
-        note = Note.objects.get(id=id)
-        canEdit = user.is_authenticated and (note.author == user or user in note.can_edit.all())
-        html = noteReader(note, canEdit, user.username if canEdit else 'Not logged in')
-        return HttpResponse(html)
+# from .components import noteReader
+# class RenderNote(APIView):
+#     # permission_classes = [permissions.IsAuthenticated]
+#     def get(self, request, id):
+#         user = request.user
+#         note = Note.objects.get(id=id)
+#         canEdit = user.is_authenticated and (note.author == user or user in note.can_edit.all())
+#         html = noteReader(note, canEdit, user.username if canEdit else 'Not logged in')
+#         return HttpResponse(html)
     
-from .components import updatedDateTime
-class SaveNoteTest(generics.UpdateAPIView):
-    serializer_class = NoteSerializer
-    queryset = Note.objects.all() 
+# from .components import updatedDateTime
+# class SaveNoteTest(generics.UpdateAPIView):
+#     serializer_class = NoteSerializer
+#     queryset = Note.objects.all() 
     
-    def finalize_response(self, request, response, *args, **kwargs):
-        # If the update was successful
-        if response.status_code == status.HTTP_200_OK: 
-            id = response.data.get('id')
-            note = Note.objects.get(id=id)
-            html = updatedDateTime(note)
-            return HttpResponse(html)
-            # response.status_code = status.HTTP_204_NO_CONTENT # so that htmx does not do any swapping
-        return super().finalize_response(request, response, *args, **kwargs)
+#     def finalize_response(self, request, response, *args, **kwargs):
+#         # If the update was successful
+#         if response.status_code == status.HTTP_200_OK: 
+#             id = response.data.get('id')
+#             note = Note.objects.get(id=id)
+#             html = updatedDateTime(note)
+#             return HttpResponse(html)
+#             # response.status_code = status.HTTP_204_NO_CONTENT # so that htmx does not do any swapping
+#         return super().finalize_response(request, response, *args, **kwargs)
         
 # ! PLEASE DO NOT TOUCH: For Testing
 class GetSharedNotes(generics.ListAPIView):
