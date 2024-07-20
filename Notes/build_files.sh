@@ -1,6 +1,6 @@
 # build_files.sh
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 # make migrations
-python3.11 manage.py migrate 
-python3.11 manage.py collectstatic
+python3.0 manage.py migrate 
+python3.9 manage.py collectstatic
