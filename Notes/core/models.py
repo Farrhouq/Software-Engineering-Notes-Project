@@ -17,6 +17,7 @@ class Label(AbstractModel):
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='labels')
     title = models.CharField(max_length=128)
+    color = models.CharField(max_length=50, null=True, default='blue')
 
     def __str__(self):
         return self.title
