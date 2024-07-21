@@ -26,7 +26,7 @@ class NoteSerializer(serializers.ModelSerializer):
 
     class Meta: 
         model = Note
-        fields = ['id','author', 'label', 'title', 'brief', 'content', 'created', 'modified', 'can_edit']
+        fields = ['id','author', 'label', 'title', 'brief', 'content', 'created', 'modified', 'can_edit', 'private']
         
     def create(self, validated_data):
         # removing the nested label and author objects and saving them separately
@@ -49,6 +49,7 @@ class NoteSerializer(serializers.ModelSerializer):
         instance.title = validated_data.get('title', instance.title)
         instance.brief = validated_data.get('brief', instance.brief)
         instance.content = validated_data.get('content', instance.content)
+        instance.private = validated_data.get('private', instance.private)
         instance.save()
         return instance
     

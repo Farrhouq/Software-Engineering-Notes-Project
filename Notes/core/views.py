@@ -22,13 +22,13 @@ class UpdateNote(generics.UpdateAPIView):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
 
+class GetNote(generics.RetrieveAPIView):
     """
     This view is used to retrieve a particular note.
     Permissions are checked if request.user has read access this view.
     Further permissions are checked by the serializer if request.user has read access. 
     A boolean field 'can_edit' is added to the retrieved note to show write access.
     """
-class GetNote(generics.RetrieveAPIView):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
     # permission_classes = [CanReadNote] # * I noticed that If you add permissions to a view the authorization credentials are required in the request
