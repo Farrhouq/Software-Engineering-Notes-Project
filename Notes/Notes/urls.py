@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from rest_framework.routers import DefaultRouter
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView
 from core import views
 
 router = DefaultRouter()
@@ -32,7 +32,9 @@ urlpatterns += [
     path('api/get-labels/', views.GetLabels.as_view()),
     path('api/get-users/', views.GetUsers.as_view()),
     path('api/update-note/<uuid:pk>/', views.UpdateNote.as_view()),
-
+    path('api/delete-note/<uuid:pk>/', views.DeleteNote.as_view()),
+    path('api/delete-label/<uuid:pk>/', views.DeleteLabel.as_view()),
+    path('api/update-label/<uuid:pk>/', views.UpdateLabel.as_view()),
     path('api/login/', views.Login.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/render-note/<uuid:id>/', views.RenderNote.as_view()),

@@ -30,6 +30,7 @@ class Note(AbstractModel):
     content = models.JSONField(null=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+    favorite = models.BooleanField(default=False)
     private = models.BooleanField(default=True) # Can only be viewed by specific people otherwise everyone can read it (through shared link)
     can_read = models.ManyToManyField(User, related_name='readable_notes') # if note is private this specifies those allowed to read it (through shared link)
     can_edit = models.ManyToManyField(User, related_name='editable_notes') # if note is private this specifies those allowed to edit it (through shared link)    

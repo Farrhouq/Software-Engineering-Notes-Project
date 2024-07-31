@@ -21,13 +21,19 @@ class CreateNote(generics.CreateAPIView):
 class UpdateNote(generics.UpdateAPIView):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
+    
 
-    """
-    This view is used to retrieve a particular note.
-    Permissions are checked if request.user has read access this view.
-    Further permissions are checked by the serializer if request.user has read access. 
-    A boolean field 'can_edit' is added to the retrieved note to show write access.
-    """
+class DeleteNote(generics.DestroyAPIView): 
+    serializer_class = NoteSerializer
+    queryset = Note.objects.all()
+    
+
+"""
+This view is used to retrieve a particular note.
+Permissions are checked if request.user has read access this view.
+Further permissions are checked by the serializer if request.user has read access. 
+A boolean field 'can_edit' is added to the retrieved note to show write access.
+"""
 class GetNote(generics.RetrieveAPIView):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
@@ -54,6 +60,14 @@ class GetNotes(generics.ListAPIView):
         return Note.objects.none() # no notes for unauthenticated users
     
 class CreateLabel(generics.CreateAPIView):
+    serializer_class = LabelSerializer
+    
+class DeleteLabel(generics.DestroyAPIView):
+    queryset = Label.objects.all()
+    serializer_class = LabelSerializer
+    
+class UpdateLabel(generics.UpdateAPIView):
+    queryset = Label.objects.all()
     serializer_class = LabelSerializer
     
 class GetLabels(generics.ListAPIView):
