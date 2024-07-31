@@ -9,3 +9,4 @@ notes-app-venv
 *.html
 components.py
 async.py
+production.env
