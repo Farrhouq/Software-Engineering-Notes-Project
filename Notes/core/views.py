@@ -21,14 +21,20 @@ class CreateNote(generics.CreateAPIView):
 class UpdateNote(generics.UpdateAPIView):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
+    
 
+class DeleteNote(generics.DestroyAPIView): 
+    serializer_class = NoteSerializer
+    queryset = Note.objects.all()
+    
+
+"""
+This view is used to retrieve a particular note.
+Permissions are checked if request.user has read access this view.
+Further permissions are checked by the serializer if request.user has read access. 
+A boolean field 'can_edit' is added to the retrieved note to show write access.
+"""
 class GetNote(generics.RetrieveAPIView):
-    """
-    This view is used to retrieve a particular note.
-    Permissions are checked if request.user has read access this view.
-    Further permissions are checked by the serializer if request.user has read access. 
-    A boolean field 'can_edit' is added to the retrieved note to show write access.
-    """
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
     # permission_classes = [CanReadNote] # * I noticed that If you add permissions to a view the authorization credentials are required in the request
@@ -54,6 +60,14 @@ class GetNotes(generics.ListAPIView):
         return Note.objects.none() # no notes for unauthenticated users
     
 class CreateLabel(generics.CreateAPIView):
+    serializer_class = LabelSerializer
+    
+class DeleteLabel(generics.DestroyAPIView):
+    queryset = Label.objects.all()
+    serializer_class = LabelSerializer
+    
+class UpdateLabel(generics.UpdateAPIView):
+    queryset = Label.objects.all()
     serializer_class = LabelSerializer
     
 class GetLabels(generics.ListAPIView):
@@ -166,4 +180,22 @@ class CheckUsername(APIView):
         except User.DoesNotExist:
             return Response({'message': 'user does not exist'}, status=status.HTTP_404_NOT_FOUND)
         return Response() 
-            
+
+import re
+class Search(APIView):
+    def get(self, request):
+        exceptions = ['.', '']
+        q = request.query_params.get('q').lower()
+        print(q)
+        username = request.query_params.get('username')
+        results = []
+        if q not in exceptions: 
+            notes = Note.objects.filter(author__username=username) 
+            pattern = re.compile(q) 
+            for note in notes:
+                text = f"{note.title.lower()} - {note.content.get('text').lower()}"
+                raw = f"{note.title} - {note.content.get('text')}"
+                match = pattern.search(text)
+                if match: 
+                    results.append({'text': raw, 'span': match.span(), 'brief': note.brief, 'title': note.title, 'id': note.id})
+        return Response(results)
