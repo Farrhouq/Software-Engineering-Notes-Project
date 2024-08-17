@@ -180,4 +180,22 @@ class CheckUsername(APIView):
         except User.DoesNotExist:
             return Response({'message': 'user does not exist'}, status=status.HTTP_404_NOT_FOUND)
         return Response() 
-            
+
+import re
+class Search(APIView):
+    def get(self, request):
+        exceptions = ['.', '']
+        q = request.query_params.get('q').lower()
+        print(q)
+        username = request.query_params.get('username')
+        results = []
+        if q not in exceptions: 
+            notes = Note.objects.filter(author__username=username) 
+            pattern = re.compile(q) 
+            for note in notes:
+                text = f"{note.title.lower()} - {note.content.get('text').lower()}"
+                raw = f"{note.title} - {note.content.get('text')}"
+                match = pattern.search(text)
+                if match: 
+                    results.append({'text': raw, 'span': match.span(), 'brief': note.brief, 'title': note.title, 'id': note.id})
+        return Response(results)

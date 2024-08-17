@@ -49,6 +49,7 @@ urlpatterns += [
     path('api/validate-signup/', views.ValidateData.as_view()),
     path('api/check-token/', views.CheckToken.as_view()),
     path('api/check-username/', views.CheckUsername.as_view()),
+    path('api/search/', views.Search.as_view()),
 ]
 
 # add at the last

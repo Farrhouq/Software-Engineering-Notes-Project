@@ -42,14 +42,14 @@ class NoteSerializer(serializers.ModelSerializer):
 
     class Meta: 
         model = Note
-        fields = ['id','author', 'label', 'title', 'brief', 'private', 'content', 'created', 'modified', 'can_edit']
+        fields = ['id','author', 'label', 'title', 'brief', 'private', 'favorite', 'content', 'created', 'modified', 'can_edit']
         
     def create(self, validated_data):
         # removing the nested label and author objects and saving them separately
         author = validated_data.pop('author')
         author = User.objects.get(username=author)
         label = validated_data.get('label') # label = dictionary or None
-        print(label)
+        # print(label)
         if label:
             validated_data.pop('label') 
             label = Label.objects.get(user=author, id=label.get('labelId')) # Labels are created before the note so it would already exist (we just need to get it)
@@ -61,15 +61,16 @@ class NoteSerializer(serializers.ModelSerializer):
     
     def update(self, instance: Note, validated_data):
         label = validated_data.get('label')
-        print('the current label is', label)
+        # print('the current label is', label)
         if label:
             validated_data.pop('label') 
             label = Label.objects.get(user=instance.author, id=label.get('labelId'))
-        instance.label = label 
+        instance.label = label
         instance.title = validated_data.get('title', instance.title)
         instance.brief = validated_data.get('brief', instance.brief)
         instance.content = validated_data.get('content', instance.content)
         instance.private = validated_data.get('private', instance.private)
+        instance.favorite = validated_data.get('favorite', instance.favorite)
         instance.save()
         return instance
     
