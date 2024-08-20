@@ -11,7 +11,7 @@ from rest_framework.response import Response
 
 # other imports
 from .serializers import NoteSerializer, LabelSerializer, UserSerializer
-from .models import Note, Label
+from .models import Note, Label, Data
 from .permissions import CanReadNote
 from .utils import assignLabelsToUsers
 
@@ -104,6 +104,9 @@ class Login(TokenObtainPairView):
             response.data['user'] = UserSerializer(user).data
             print(response.data)
         return super().finalize_response(request, response, *args, **kwargs)
+    
+    
+        
 
 # ! PLEASE DO NOT TOUCH: For Testing
 
@@ -162,6 +165,7 @@ class ValidateData(APIView):
         form = CreateUserForm(request.data)
         if form.is_valid():
             user = form.save()
+            Data.objects.create(user=user) # create data for a new user
             return Response({'username': user.username, 'email': user.email})
         return Response(form.errors.as_json(), status=status.HTTP_400_BAD_REQUEST)
 from rest_framework_simplejwt.authentication import JWTAuthentication
@@ -199,3 +203,67 @@ class Search(APIView):
                 if match: 
                     results.append({'text': raw, 'span': match.span(), 'brief': note.brief, 'title': note.title, 'id': note.id})
         return Response(results)
+
+class Invites(APIView):
+    def get(self, request): 
+        username = request.query_params.get('username')
+        user = User.objects.get(username=username)
+        userData, created = Data.objects.get_or_create(user=user)
+        return Response(userData.invites)
+    
+    def post(self, request):
+        if request.query_params.get('reply'):
+            return self.process_invite_reply(request)
+        return self.setup_invite(request)
+       
+    def setup_invite(self, request):
+        invites = request.data # list of dictionaries
+        emailsNotFound = []
+        emailsFound = []
+        for invite in invites:
+            try:
+                user = User.objects.get(email=invite.get('email'))
+                userData, created = Data.objects.get_or_create(user=user)
+                userData.invites.append(invite)
+                userData.save()
+                emailsFound.append(invite.get('email'))
+            except User.DoesNotExist:
+                print('The user does not exist')
+                emailsNotFound.append(invite.get('email'))
+        return Response({'emails_not_found': emailsNotFound, 'emails_found': emailsFound})
+    
+    
+    def process_invite_reply(self, request): 
+        user = request.user
+        permission = request.data.get('permission')
+        reply = request.data.get('reply')
+        noteId = request.data.get('note_id') # note id of the note whose invite has been replied to
+        userData = Data.objects.get(user=user)
+        invites = userData.invites
+        newInvites = []
+        for invite in invites:
+            if invite.get('note_id') == noteId:
+                note = Note.objects.get(id=noteId)
+                if reply == 'accept' and permission == 'Can View':
+                    note.can_read.add(user)
+                    print(note.can_read.all())
+                if reply == 'accept' and permission == 'Can Edit':
+                    note.can_read.add(user)
+                    note.can_edit.add(user)
+            else: 
+                newInvites.append(invite)
+        userData.invites = newInvites 
+        userData.save()
+        return Response(newInvites)
+    
+        
+class UploadImage(APIView):
+    def post(self, request):
+        image = request.data.get('profile-image')
+        user = request.user
+        userData, created = Data.objects.get_or_create(user=user)
+        userData.profile_pic = image
+        userData.save()
+        print(userData.profile_pic.url)
+        return Response({'url': userData.profile_pic.url})
+    

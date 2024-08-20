@@ -37,4 +37,9 @@ class Note(AbstractModel):
 
     def __str__(self) -> str:
         return self.brief
-    
+
+class Data(AbstractModel):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='data')
+    invites = models.JSONField(null=True, default=list)
+    settings = models.JSONField(null=True, default=dict)
+    profile_pic = models.ImageField(upload_to='profile_pics/', null=True)
