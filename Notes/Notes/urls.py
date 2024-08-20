@@ -50,6 +50,8 @@ urlpatterns += [
     path('api/check-token/', views.CheckToken.as_view()),
     path('api/check-username/', views.CheckUsername.as_view()),
     path('api/search/', views.Search.as_view()),
+    path('api/invites/', views.Invites.as_view()),
+    path('api/upload-image/', views.UploadImage.as_view()),
 ]
 
 # add at the last

@@ -10,3 +10,4 @@ notes-app-venv
 components.py
 async.py
 production.env
+media

@@ -1,16 +1,22 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Note, Label
+from .models import Note, Label, Data
 
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    profile_pic_url = serializers.SerializerMethodField()
     class Meta: 
         model = User
-        fields = ['username', 'email', 'password']
+        fields = ['username', 'email', 'password', 'profile_pic_url']
         
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
+    
+    def get_profile_pic_url(self, obj):
+        user = obj
+        userData, created = Data.objects.get_or_create(user=user) 
+        return userData.profile_pic.url if userData.profile_pic else None
 
 class LabelSerializer(serializers.ModelSerializer):
     user = serializers.CharField()
@@ -39,10 +45,11 @@ class NoteSerializer(serializers.ModelSerializer):
     # label = serializers.CharField(allow_null=True, required=False)
     label = LabelSerializer(allow_null=True)
     can_edit = serializers.SerializerMethodField()
+    can_read = serializers.SerializerMethodField()
 
     class Meta: 
         model = Note
-        fields = ['id','author', 'label', 'title', 'brief', 'private', 'favorite', 'content', 'created', 'modified', 'can_edit']
+        fields = ['id','author', 'label', 'title', 'brief', 'private', 'favorite', 'content', 'created', 'modified', 'can_edit', 'can_read']
         
     def create(self, validated_data):
         # removing the nested label and author objects and saving them separately
@@ -83,3 +90,7 @@ class NoteSerializer(serializers.ModelSerializer):
     def get_can_edit(self, obj):
         request = self.context.get('request')
         return request.user == obj.author or request.user in obj.can_edit.all()
+    
+    def get_can_read(self, obj):
+        request = self.context.get('request')
+        return request.user == obj.author or request.user in obj.can_read.all()
